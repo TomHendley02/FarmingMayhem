@@ -31,29 +31,147 @@ double fertiliserPrice = 163.97;
 double seedPrice = 56.68;
 double fuelPrice = 6.89;
 
-double wheatYield = 2.83;
-double barelyYield = 2.39;
-double osrYield = 1.1;
-double oatsYield = 1.98;
-double fieldbeansYield = 1.34;
-double potatoesYield = 10.12;
-double beetsYield = 32.83;
+double wheatYield = 3.6;
+double barleyYield = 3.89;
+double osrYield = 2.35;
+double oatsYield = 2.31;
+double fieldbeansYield = 1.92;
+double potatoesYield = 16.72;
+double beetsYield = 23.4;
+double strawYield = 13.28;
+
+double wheatPrice = 106.19;
+double barleyPrice = 100.62;
+double osrPrice = 142.42;
+double oatsPrice = 148.9;
+double fieldbeansPrice = 174.04;
+double potatoesPrice = 45.08;
+double beetsPrice = 43.49;
+double strawPrice = 12.91;
 
 int gamePlay();
 int start();
 int fieldworkMenu();
 
+int strawHarvest(int menuSelection) {
+    string confirmTask;
+    double multiplier = 1;
+    double yield;
+
+    if (field[menuSelection - 1][4] == 1) {
+        multiplier = 1;
+    }
+    else {
+        multiplier = 0.8;
+    }
+
+    yield = strawYield * strawPrice * multiplier;
+
+    cout << "The cost of harvesting this field is " << round(field[menuSelection - 1][0] * fuelPrice * 2) << " pounds in fuel, it will take " << round(field[menuSelection - 1][0] / 2) << " hours to complete, but will yield " <<
+        round(yield) << " pounds woth of profit." << endl << "Do you with to carry out this task (Y or N):";
+    cin >> confirmTask;
+    cout << endl;
+
+    if (confirmTask == "y" or "Y") {
+        money = money - (field[menuSelection - 1][0] * fuelPrice * 2) + yield;
+        time = time - (field[menuSelection - 1][0] / 4);
+        field[menuSelection - 1][1] = 0;
+        field[menuSelection - 1][2] = 0;
+        field[menuSelection - 1][3] = 0;
+        field[menuSelection - 1][4] = 0;
+        field[menuSelection - 1][5] = 0;
+        field[menuSelection - 1][6] = 0;
+        gamePlay();
+    }
+    else if (confirmTask == "n" or "N") {
+        gamePlay();
+    }
+    else {
+        cout << "That was not a valid input, try again..." << endl << endl;
+        fieldworkMenu();
+    }
+    return(0);
+}
+
+int harvesting(int menuSelection) {
+    string confirmTask; //Variable for confirming menu selection.
+    double multiplier = 1;
+    double yield;
+
+    if (field[menuSelection - 1][4] == 1) {
+        multiplier = 1;
+    }
+    else {
+        multiplier = 0.8;
+    }
+
+    if (field[menuSelection - 1][3] == 1) {
+        yield = wheatYield * wheatPrice * multiplier;
+    }
+    else if (field[menuSelection - 1][3] == 2) {
+        yield = barleyYield * barleyPrice * multiplier;
+    }
+    else if (field[menuSelection - 1][3] == 3) {
+        yield = osrYield * osrPrice * multiplier;
+    }
+    else if (field[menuSelection - 1][3] == 4) {
+        yield = oatsYield * oatsPrice * multiplier;
+    }
+    else if (field[menuSelection - 1][3] == 5) {
+        yield = fieldbeansYield * fieldbeansPrice * multiplier;
+    }
+    else if (field[menuSelection - 1][3] == 6) {
+        yield = potatoesYield * potatoesPrice * multiplier;
+    }
+    else if (field[menuSelection - 1][3] == 7){
+        yield = beetsYield * beetsPrice * multiplier;
+    }
+    
+    cout << "The cost of harvesting this field is " << round(field[menuSelection - 1][0] * fuelPrice) << " pounds in fuel, it will take " << round(field[menuSelection - 1][0] / 4) << " hours to complete, but will yield " <<
+        round(yield) << " pounds woth of profit." << endl << "Do you with to carry out this task (Y or N):";
+    cin >> confirmTask;
+    cout << endl;
+
+    if (time < 24 - (field[menuSelection - 1][0] / 4)) {
+        if (confirmTask == "y" or "Y") {
+            money = money + yield - (field[menuSelection - 1][0] * fuelPrice);
+            time = time - (field[menuSelection - 1][0] / 4);
+            if (field[menuSelection - 1][3] == 1 or 2 or 4) {
+                field[menuSelection - 1][6] = 1;
+            }
+            else {
+                field[menuSelection - 1][1] = 0;
+                field[menuSelection - 1][2] = 0;
+                field[menuSelection - 1][3] = 0;
+                field[menuSelection - 1][4] = 0;
+                field[menuSelection - 1][5] = 0;
+            }
+            gamePlay();
+        }
+        else if (confirmTask == "n" or "N") {
+            gamePlay();
+        }
+        else {
+            cout << "That was not a valid input, try again..." << endl << endl;
+            fieldworkMenu();
+        }
+    }
+
+    return(0);
+}
+
 int fertilising(int menuSelection) {
     string confirmTask; //Variable for confirming menu selection.
 
-    cout << "You can either choose to fertilise the field to boost the yield, however it will cost more..." << endl << "It will cost " << round(field[menuSelection - 1][0] * 6.89) << " pounds in fuel, cost " <<
+    cout << "You can either choose to fertilise the field to boost the yield, however it will cost more..." << endl << "It will cost " << round(field[menuSelection - 1][0] * fuelPrice) << " pounds in fuel, cost " <<
         round(field[menuSelection - 1][0] * fertiliserPrice) << " pounds in fertiliser" << " and take " << round(field[menuSelection - 1][0] / 4) << " hours." << endl << "Do you wish to carry out this task (Y or N): ";
     cin >> confirmTask; //Output message informing the player that this task is optional, and of the costs associated with this task and the benefits of performing the task.
     cout << endl; //Saves the players decision.
+   
     if (confirmTask == "y" or "Y") { //If selected yes carries out the folllowing:
-        if ((money > (field[menuSelection - 1][0] * 6.89) + (field[menuSelection - 1][0] * fertiliserPrice)) && (time < 24 - (field[menuSelection - 1][0] / 4))) { //Checks that the player has enough money and time left in the day.
+        if ((money > (field[menuSelection - 1][0] * fuelPrice) + (field[menuSelection - 1][0] * fertiliserPrice)) && (time < 24 - (field[menuSelection - 1][0] / 4))) { //Checks that the player has enough money and time left in the day.
             field[menuSelection - 1][4] = 1; //Changes the current fertiliser state of the field.
-            money = money - ((field[menuSelection - 1][0] * 6.8) + (field[menuSelection - 1][0] * fertiliserPrice)); //Deducts the money required for the work.
+            money = money - ((field[menuSelection - 1][0] * fuelPrice) + (field[menuSelection - 1][0] * fertiliserPrice)); //Deducts the money required for the work.
             time = time + field[menuSelection - 1][0] / 4; //Increases the time by the time the task took.
             gamePlay(); //Goes back to the main gameplay menu.
         }
@@ -81,57 +199,58 @@ int sowing(int menuSelection) {
         "[5] Fieldbeans" << endl << "[6] Potatoes" << endl << "[7] Sugar Beets" << endl << "Please select which crop you wish to be planted: "; //Outputs the different crop options and allows the player to choose one.
     cin >> cropSelection;
     cout << endl; // Saves the players crop selection for planting.
-    cout << "It will cost " << round(field[menuSelection - 1][0] * 6.89) << " pounds in fuel, cost " << round(field[menuSelection - 1][0] * seedPrice) << " pounds in seed"
+    cout << "It will cost " << round(field[menuSelection - 1][0] * fuelPrice) << " pounds in fuel, cost " << round(field[menuSelection - 1][0] * seedPrice) << " pounds in seed"
         << " and take " << round(field[menuSelection - 1][0] / 4) << " hours." << endl << "Do you wish to carry out this task (Y or N): "; //Output message informing the player of the costs associated with this task.
     cin >> confirmTask;
     cout << endl; //Saves the players decision.
+    
     if (confirmTask == "y" or "y") { //If selected yes carries out the folllowing:
-        if ((money > (field[menuSelection - 1][0] * 6.89) + (field[menuSelection - 1][0] * seedPrice)) && (time < 24 - (field[menuSelection - 1][0] / 4))) { //Checks that the player has enough money and time left in the day.
+        if ((money > (field[menuSelection - 1][0] * fuelPrice) + (field[menuSelection - 1][0] * seedPrice)) && (time < 24 - (field[menuSelection - 1][0] / 4))) { //Checks that the player has enough money and time left in the day.
             if ((cropSelection == 1) & ((day > 6) && (day <= 12))) { //Checks that it is the right time of year for planting this crop.
                 field[menuSelection - 1][3] = cropSelection; //Changes the state of the field in repect to the planted crop.
-                money = money - ((field[menuSelection - 1][0] * 6.8) + (field[menuSelection - 1][0] * seedPrice)); //Deducts the money required for the work.
+                money = money - ((field[menuSelection - 1][0] * fuelPrice) + (field[menuSelection - 1][0] * seedPrice)); //Deducts the money required for the work.
                 time = time + field[menuSelection - 1][0] / 4; //Increases the time by the time the task took.
                 field[menuSelection - 1][5] = 14; //Changes the growth timer to the number of in-game days left + 1.
                 gamePlay(); //Goes back to the main gameplay menu.
             }
             else if ((cropSelection == 2) && ((day > 6) && (day <= 15))) { //Same as previous crop just different numbers for differences between crops.
                 field[menuSelection - 1][3] = cropSelection;
-                money = money - ((field[menuSelection - 1][0] * 6.8) + (field[menuSelection - 1][0] * seedPrice));
+                money = money - ((field[menuSelection - 1][0] * fuelPrice) + (field[menuSelection - 1][0] * seedPrice));
                 time = time + field[menuSelection - 1][0] / 4;
                 field[menuSelection - 1][5] = 14;
                 gamePlay();
             }
             else if ((cropSelection == 3) && ((day > 3) && (day <= 12))) { //Same as previous crop just different numbers for differences between crops.
                 field[menuSelection - 1][3] = cropSelection;
-                money = money - ((field[menuSelection - 1][0] * 6.8) + (field[menuSelection - 1][0] * seedPrice));
+                money = money - ((field[menuSelection - 1][0] * fuelPrice) + (field[menuSelection - 1][0] * seedPrice));
                 time = time + field[menuSelection - 1][0] / 4;
                 field[menuSelection - 1][5] = 16;
                 gamePlay();
             }
             else if ((cropSelection == 4) && ((day > 4) && (day <= 12))) { //Same as previous crop just different numbers for differences between crops.
                 field[menuSelection - 1][3] = cropSelection;
-                money = money - ((field[menuSelection - 1][0] * 6.8) + (field[menuSelection - 1][0] * seedPrice));
+                money = money - ((field[menuSelection - 1][0] * fuelPrice) + (field[menuSelection - 1][0] * seedPrice));
                 time = time + field[menuSelection - 1][0] / 4;
                 field[menuSelection - 1][5] = 10;
                 gamePlay();
             }
             else if ((cropSelection == 5) && ((day > 4) && (day <= 12))) { //Same as previous crop just different numbers for differences between crops.
                 field[menuSelection - 1][3] = cropSelection;
-                money = money - ((field[menuSelection - 1][0] * 6.8) + (field[menuSelection - 1][0] * seedPrice));
+                money = money - ((field[menuSelection - 1][0] * fuelPrice) + (field[menuSelection - 1][0] * seedPrice));
                 time = time + field[menuSelection - 1][0] / 4;
                 field[menuSelection - 1][5] = 12;
                 gamePlay();
             }
             else if ((cropSelection == 6) && ((day > 9) && (day <= 15))) { //Same as previous crop just different numbers for differences between crops.
                 field[menuSelection - 1][3] = cropSelection;
-                money = money - ((field[menuSelection - 1][0] * 6.8) + (field[menuSelection - 1][0] * seedPrice));
+                money = money - ((field[menuSelection - 1][0] * fuelPrice) + (field[menuSelection - 1][0] * seedPrice));
                 time = time + field[menuSelection - 1][0] / 4;
                 field[menuSelection - 1][5] = 15;
                 gamePlay();
             }
             else if ((cropSelection == 7) && ((day > 7) && (day <= 13))) { //Same as previous crop just different numbers for differences between crops.
                 field[menuSelection - 1][3] = cropSelection;
-                money = money - (field[menuSelection - 1][0] * 6.8) + (field[menuSelection - 1][0] * seedPrice);
+                money = money - (field[menuSelection - 1][0] * fuelPrice) + (field[menuSelection - 1][0] * seedPrice);
                 time = time + field[menuSelection - 1][0] / 4;
                 field[menuSelection - 1][5] = 22;
                 gamePlay();
@@ -164,14 +283,15 @@ int sowing(int menuSelection) {
 int cultivating(int menuSelection) {
     string confirmTask;
 
-    cout << "It will cost " << round(field[menuSelection - 1][0] * 6.89 * 2) << " pounds in fuel and take " << round(field[menuSelection - 1][0] / 4) << " hours." << endl <<
+    cout << "It will cost " << round(field[menuSelection - 1][0] * fuelPrice * 2) << " pounds in fuel and take " << round(field[menuSelection - 1][0] / 4) << " hours." << endl <<
         "Do you wish to carry out this task (Y or N): "; //Output message informing the player of the costs associated with this task, it uses a 2x multiplier for fuel costs as ground work is power heavy.
     cin >> confirmTask;
     cout << endl; //Saves the players decision.
+    
     if (confirmTask == "y" or "y") { //If selected yes carries out the folllowing:
-        if ((money > (field[menuSelection - 1][0] * 6.89) * 2) && (time < 24 - (field[menuSelection - 1][0] / 4))) { //Checks that the player has enough money and time left in the day.
+        if ((money > (field[menuSelection - 1][0] * fuelPrice) * 2) && (time < 24 - (field[menuSelection - 1][0] / 4))) { //Checks that the player has enough money and time left in the day.
             field[menuSelection - 1][2] = 1; //Changes the current state of the field.
-            money = money - (field[menuSelection - 1][0] * 6.89) * 2; //Deducts the money required for the work.
+            money = money - (field[menuSelection - 1][0] * fuelPrice) * 2; //Deducts the money required for the work.
             time = time + field[menuSelection - 1][0] / 4; //Increases the time by the time the task took.
             gamePlay(); //Goes back to the main gameplay menu.
         }
@@ -197,14 +317,15 @@ int cultivating(int menuSelection) {
 int ploughing(int menuSelection) {
     string confirmTask; //Variable for confirming if a task is to be carried out.
 
-    cout << "It will cost " << round(field[menuSelection - 1][0] * 6.89 * 2) << " pounds in fuel and take " << round(field[menuSelection - 1][0] / 4) << " hours." << endl <<
+    cout << "It will cost " << round(field[menuSelection - 1][0] * fuelPrice * 2) << " pounds in fuel and take " << round(field[menuSelection - 1][0] / 4) << " hours." << endl <<
         "Do you wish to carry out this task (Y or N): "; //Output message informing the player of the costs associated with this task, it uses a 2x multiplier for fuel costs as ground work is power heavy.
     cin >> confirmTask;
     cout << endl; //Saves the players decision.
+   
     if (confirmTask == "y" or "y") { //If selected yes carries out the folllowing:
-        if ((money > (field[menuSelection - 1][0] * 6.89) * 2) && (time < 24 - (field[menuSelection - 1][0] / 4))) { //Checks that the player has enough money and time left in the day.
+        if ((money > (field[menuSelection - 1][0] * fuelPrice) * 2) && (time < 24 - (field[menuSelection - 1][0] / 4))) { //Checks that the player has enough money and time left in the day.
             field[menuSelection - 1][1] = 1; //Changes the current state of the field.
-            money = money - (field[menuSelection - 1][0] * 6.89) * 2; //Deducts the money required for the work.
+            money = money - (field[menuSelection - 1][0] * fuelPrice) * 2; //Deducts the money required for the work.
             time = time + field[menuSelection - 1][0] / 4; //Increases the time by the time the task took.
             gamePlay(); //Goes back to the main gameplay menu.
         }
@@ -260,7 +381,7 @@ int fieldworkMenu()
                 crop = "Empty";
             }
 
-            cout << "[" << i+1 << "]   " << "Crop: " << crop << "   "; //Start of the field data being dispalyed the player.
+            cout << "[" << i + 1 << "]   " << "Crop: " << crop << "   "; //Start of the field data being dispalyed the player.
 
             if (field[i][1] == 1) { //Series of embedded if statements to check what the next stage of work required for a field is.
                 if (field[i][2] == 1) {
@@ -306,12 +427,22 @@ int fieldworkMenu()
     }
     else if (field[menuSelection - 1][2] == 0) {
         cultivating(menuSelection); //Goes to the cultivating function of a field.
-        }
+    }
     else if (field[menuSelection - 1][3] == 0) {
         sowing(menuSelection); //Goes to the sowing function of a field.
     }
     else if (field[menuSelection - 1][4] == 0) {
         fertilising(menuSelection); //Goes to the fertilising function of a field.
+    }
+    else if (field[menuSelection - 1][5] != 1) {
+        cout << "It apears this field is not ready to be harvested yet." << endl << endl;
+        gamePlay(); //Checks if the field is ready to be harvested yet and if not maks the player aware of this.
+    }
+    else if (field[menuSelection - 1][5] == 1) {
+        harvesting(menuSelection); //Goes to the harvesting function of a field.
+    }
+    else if (field[menuSelection - 1][6] == 1) {
+        strawHarvest(menuSelection); //Goes to the straw collection function of a field.
     }
 
     return(0);
