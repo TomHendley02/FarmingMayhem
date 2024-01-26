@@ -86,7 +86,7 @@ int fieldworkMenu();
 
 int checkGameEnd() {
     if (money <= 0) {
-        cout << "The end of they year has come and it appears you have run out of moeny..." << endl << endl << "GAME OVER" << endl << endl;
+        cout << "The end of they year has come and it appears you have run out of money..." << endl << endl << "GAME OVER" << endl << endl;
         exit(1);
     }
     //If the player reaches the end of a year and they are in negative meoney from random events then the game ends.
@@ -486,6 +486,7 @@ int randomEvent() {
         else {
         cout << "There is no random event today..." << endl << endl; //Outputs that there will be no random event today.
         }
+    cout << "There is no random event today..." << endl << endl; //Outputs that there will be no random event today.
     }
 
     return(0);
