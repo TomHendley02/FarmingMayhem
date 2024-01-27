@@ -161,10 +161,12 @@ int randomEvent() {
         //Costs increase by 10%.
     }
     else if (year == 3 && day == 15) { //If it is day 15 in year 3 the 'Russia/Ukraine War' event occurs.
-        cout << " A war has broken out in one of the biggest exporters of oil, this will affect fuel prices..." << endl << endl;
+        cout << " A war has broken out in one of the biggest exporters of oil and fertiliser, this will affect these prices..." << endl << endl;
 
         fuelPrice = fuelPrice * 2;
         //Fuel prices double.
+        fertiliserPrice = fertiliserPrice * 1.5;
+        //Fertiliser prices increase by 50%.
     }
     else if (year == 4 && day == 2) { //If it is day 2 year 4 the 'Covid-19' event occurs.
         cout << "A viral pandemic has broken out and it has affected certain prices and costs..." << endl << endl;
@@ -179,8 +181,8 @@ int randomEvent() {
         //Cost of good decreases by 10 percent exept barley which decreases by 20% as it is mainly used for beer brewing and all pubs and bars are shut.
 
         fuelPrice = fuelPrice * 1.2;
-        fertiliserPrice = fertiliserPrice * 1.4;
-        //Fuel price increases by 20% and fertiliser prices increase by 40%.
+        fertiliserPrice = fertiliserPrice * 1.2;
+        //Fuel price increases by 20% and fertiliser prices increase by 20%.
     }
     else if (year == 5 && day == 26) { //If it is day 26 year 5 than the pandemic ends.
         cout << "The pandemic that started last year has now ended." << endl << endl;
@@ -201,7 +203,7 @@ int randomEvent() {
     else {
         if (eventChance <= 5) { //Checks what the cahnce of an event is.
             if (day % 3 == 0) { //If the day number is devisable by 3 chance of money event.
-                if (money >= 7500 && money < 15000) {
+                if (money >= 1000 && money < 15000) {
                     moneyEvent = rand() % 50 + 1;
                     //If money is greater the £7500 and less than £15000 makes the chance between 1 and 50.
                 }
